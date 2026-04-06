@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Full-Stack Minimalist Quiz Application
+
+A modern, responsive, and minimalist Quiz Application built with a decoupled architecture. It features a Next.js frontend with a professional light/dark glassmorphism UX, and a lightning-fast Python FastAPI backend serving the quiz data in real-time.
+
+## Features
+- **Professional Minimalist UI:** Clean aesthetic with subtle glassmorphism (transparency/backdrop-blur) effects—no distracting gradients or emojis.
+- **Dark & Light Mode:** Fully responsive theme support.
+- **Full-Stack Architecture:** Next.js (React) front-end communicating with a Python FastAPI REST API.
+- **Topic Selection:** Categorized quizzes with multiple subjects.
+- **Result Analysis:** See detailed breakdown of your correct and incorrect answers at the end of the quiz.
+- **Time Tracking:** Per-question countdown timer.
+- **Customizable Content:** Easily structure and add your own topics and questions via a simple JSON file.
+
+## Tech Stack
+- **Frontend:** Next.js, React, Tailwind CSS, Lucide Icons, shadcn/ui.
+- **Backend:** Python 3, FastAPI, Uvicorn, Pydantic.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+Ensure you have the following installed on your system:
+- [Node.js](https://nodejs.org/en/) (v16 or higher)
+- [Python](https://www.python.org/downloads/) (v3.8 or higher)
+- Git
 
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/codexAbhi007/Python-quiz-app.git
+cd Python-quiz-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Setup the Backend (FastAPI)
+```bash
+# Navigate to the backend directory
+cd backend
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# (Optional but recommended) Create and activate a virtual environment
+python -m venv venv
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# On Windows:
+venv\Scripts\activate 
+# On macOS/Linux:
+source venv/bin/activate
 
-## Learn More
+# Install dependencies (FastAPI, Uvicorn, etc.)
+pip install -r requirements.txt
 
-To learn more about Next.js, take a look at the following resources:
+# Start the FastAPI server
+uvicorn main:app --reload
+```
+The backend API will run on `http://localhost:8000`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. Setup the Frontend (Next.js)
+Open a *new* terminal window/tab:
+```bash
+# Navigate to the frontend directory
+cd frontend
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Install dependencies
+npm install
 
-## Deploy on Vercel
+# Start the development server
+npm run dev
+```
+The frontend will run on `http://localhost:3000`. Open this URL in your browser to play the quiz!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## How to Add Your Own Questions
+
+The quiz data is currently served from a static JSON file located at `backend/questions.json`. To add custom topics and questions, simply modify this file.
+
+### Structure of `questions.json`
+
+```json
+{
+  "topics": [
+    {
+      "id": "topic-1",
+      "name": "Your Custom Topic",
+      "description": "Short description of what the topic covers."
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "topicId": "topic-1",
+      "question": "What is 2 + 2?",
+      "options": ["3", "4", "5", "6"],
+      "answer": "4"
+    }
+  ]
+}
+```
+
+### Steps to add data:
+1. **Add a Topic:** Add a new JSON object inside the `"topics"` array. Give it a unique `"id"` (e.g., `"web-dev"`).
+2. **Add Questions:** Add new question objects inside the `"questions"` array. 
+   - Ensure the `"topicId"` exactly matches the `"id"` of the topic you created.
+   - Provide an array of 4 exactly formatted `"options"`.
+   - Set the `"answer"` to exactly match one of the string options you provided.
+3. **Save the file:** The FastAPI server will automatically serve the updated data on the next request. Refresh your browser to see your new questions!

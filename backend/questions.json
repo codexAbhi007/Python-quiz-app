@@ -1,0 +1,536 @@
+{
+  "topics": [
+    {
+      "id": "t1",
+      "name": "Operating System",
+      "description": "Test your knowledge of OS concepts like processes, memory management, and deadlocks."
+    },
+    {
+      "id": "t2",
+      "name": "Python",
+      "description": "Challenge your understanding of Python syntax, data structures, and features."
+    },
+    {
+      "id": "t3",
+      "name": "DBMS",
+      "description": "Test your knowledge of databases, SQL, ACID properties, and regular forms."
+    },
+    {
+      "id": "t4",
+      "name": "DAA",
+      "description": "Design and Analysis of Algorithms - test your computational problem-solving."
+    },
+    {
+      "id": "t5",
+      "name": "Artificial Intelligence",
+      "description": "Test topics from Rich and Knight: state spaces, heuristics, and knowledge representation."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "topicId": "t1",
+      "question": "Which scheduling algorithm allocates the CPU first to the process that requests the CPU first?",
+      "options": ["Round Robin", "Priority Scheduling", "FCFS", "SJF"],
+      "correctOption": 2
+    },
+    {
+      "id": "q2",
+      "topicId": "t1",
+      "question": "What is a process in an operating system?",
+      "options": [
+        "A program in high level language",
+        "A program in execution",
+        "A hardware component",
+        "A software library"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q3",
+      "topicId": "t1",
+      "question": "What is a deadlock?",
+      "options": [
+        "A situation where processes are running concurrently",
+        "A situation where a set of processes are blocked waiting for each other",
+        "A memory segmentation fault",
+        "A CPU scheduling error"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q4",
+      "topicId": "t1",
+      "question": "Which of the following is not an operating system?",
+      "options": ["Windows", "Linux", "Oracle", "macOS"],
+      "correctOption": 2
+    },
+    {
+      "id": "q5",
+      "topicId": "t1",
+      "question": "What is paging?",
+      "options": [
+        "A memory management scheme",
+        "A deadlock prevention technique",
+        "A file system structure",
+        "A CPU scheduling algorithm"
+      ],
+      "correctOption": 0
+    },
+    {
+      "id": "q6",
+      "topicId": "t1",
+      "question": "Which algorithm is used for deadlock avoidance?",
+      "options": [
+        "Round Robin",
+        "Banker's algorithm",
+        "Elevator algorithm",
+        "Kruskal's algorithm"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q7",
+      "topicId": "t1",
+      "question": "What does thrashing refer to?",
+      "options": [
+        "Excessive I/O operations and page faults",
+        "A high degree of multiprogramming",
+        "Efficient CPU utilization",
+        "Terminating a zombie process"
+      ],
+      "correctOption": 0
+    },
+    {
+      "id": "q8",
+      "topicId": "t1",
+      "question": "What is virtual memory?",
+      "options": [
+        "An illusion of a larger main memory",
+        "Cache memory",
+        "Secondary storage",
+        "Registers"
+      ],
+      "correctOption": 0
+    },
+    {
+      "id": "q9",
+      "topicId": "t1",
+      "question": "What part of the OS interacts directly with the hardware?",
+      "options": ["Shell", "Kernel", "Compiler", "Application"],
+      "correctOption": 1
+    },
+    {
+      "id": "q10",
+      "topicId": "t1",
+      "question": "What does PCB stand for in an operating system?",
+      "options": [
+        "Printed Circuit Board",
+        "Process Control Block",
+        "Process Communication Block",
+        "Primary Control Block"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q11",
+      "topicId": "t2",
+      "question": "Who developed the Python language?",
+      "options": [
+        "Dennis Ritchie",
+        "Bjarne Stroustrup",
+        "Guido van Rossum",
+        "James Gosling"
+      ],
+      "correctOption": 2
+    },
+    {
+      "id": "q12",
+      "topicId": "t2",
+      "question": "In which year was the Python language developed?",
+      "options": ["1989", "1991", "1995", "1981"],
+      "correctOption": 1
+    },
+    {
+      "id": "q13",
+      "topicId": "t2",
+      "question": "What will be the output of print(type([]))?",
+      "options": [
+        "<class 'tuple'>",
+        "<class 'list'>",
+        "<class 'dict'>",
+        "<class 'set'>"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q14",
+      "topicId": "t2",
+      "question": "Which of the following is an invalid variable name in Python?",
+      "options": ["my_string_1", "1st_string", "foo", "_"],
+      "correctOption": 1
+    },
+    {
+      "id": "q15",
+      "topicId": "t2",
+      "question": "Which keyword is used to define a function in Python?",
+      "options": ["func", "define", "def", "function"],
+      "correctOption": 2
+    },
+    {
+      "id": "q16",
+      "topicId": "t2",
+      "question": "What will be the output of print(2**3)?",
+      "options": ["6", "8", "9", "Error"],
+      "correctOption": 1
+    },
+    {
+      "id": "q17",
+      "topicId": "t2",
+      "question": "Which of the following is a mutable built-in data type in Python?",
+      "options": ["Tuple", "String", "List", "Integer"],
+      "correctOption": 2
+    },
+    {
+      "id": "q18",
+      "topicId": "t2",
+      "question": "What does the 'len()' function do in Python?",
+      "options": [
+        "Counts the number of elements in an object",
+        "Increases the length of a string",
+        "Removes elements from a list",
+        "Reverses a sequence"
+      ],
+      "correctOption": 0
+    },
+    {
+      "id": "q19",
+      "topicId": "t2",
+      "question": "Which operator is used to check if two values are equal in value but not necessarily identity?",
+      "options": ["is", "=", "==", "==="],
+      "correctOption": 2
+    },
+    {
+      "id": "q20",
+      "topicId": "t2",
+      "question": "Which statement is used to stop a loop completely?",
+      "options": ["continue", "pass", "break", "return"],
+      "correctOption": 2
+    },
+    {
+      "id": "q21",
+      "topicId": "t3",
+      "question": "What is the full form of DBMS?",
+      "options": [
+        "Database Management System",
+        "Data Basic Management System",
+        "Data Base Main System",
+        "Database Manipulation System"
+      ],
+      "correctOption": 0
+    },
+    {
+      "id": "q22",
+      "topicId": "t3",
+      "question": "What does an RDBMS consist of?",
+      "options": [
+        "Collection of Keys",
+        "Collection of Tables",
+        "Collection of Nodes",
+        "Collection of Trees"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q23",
+      "topicId": "t3",
+      "question": "The ability to modify the schema at one level without affecting the next higher level is known as:",
+      "options": [
+        "Abstraction",
+        "Data Independence",
+        "Encapsulation",
+        "Polymorphism"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q24",
+      "topicId": "t3",
+      "question": "An entity set that does not have sufficient attributes to form a primary key is a _____.",
+      "options": [
+        "Strong entity set",
+        "Weak entity set",
+        "Variant set",
+        "Primary set"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q25",
+      "topicId": "t3",
+      "question": "Which of the following is a DDL command?",
+      "options": ["SELECT", "INSERT", "CREATE", "UPDATE"],
+      "correctOption": 2
+    },
+    {
+      "id": "q26",
+      "topicId": "t3",
+      "question": "What does ACID stand for in DBMS?",
+      "options": [
+        "Automatic, Consistent, Isolated, Durable",
+        "Atomicity, Consistency, Isolation, Durability",
+        "Action, Creation, Indexing, Deletion",
+        "None of the above"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q27",
+      "topicId": "t3",
+      "question": "What is a primary key?",
+      "options": [
+        "A key that allows null values",
+        "A key that is unique and not null",
+        "A key that connects two tables",
+        "A temporary key parameter"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q28",
+      "topicId": "t3",
+      "question": "Which normal form requires resolving multivalued dependencies?",
+      "options": ["1NF", "2NF", "BCNF", "4NF"],
+      "correctOption": 3
+    },
+    {
+      "id": "q29",
+      "topicId": "t3",
+      "question": "What operation combines rows from two or more tables based on a related column?",
+      "options": ["UNION", "JOIN", "INTERSECT", "GROUP BY"],
+      "correctOption": 1
+    },
+    {
+      "id": "q30",
+      "topicId": "t3",
+      "question": "Which command is used to remove all records from a table without removing its structure?",
+      "options": ["DROP", "DELETE", "TRUNCATE", "REMOVE"],
+      "correctOption": 2
+    },
+    {
+      "id": "q31",
+      "topicId": "t4",
+      "question": "Which algorithmic design paradigm is used by Merge Sort?",
+      "options": [
+        "Greedy Approach",
+        "Dynamic Programming",
+        "Divide and Conquer",
+        "Backtracking"
+      ],
+      "correctOption": 2
+    },
+    {
+      "id": "q32",
+      "topicId": "t4",
+      "question": "What is the worst-case time complexity of Quick Sort?",
+      "options": ["O(n log n)", "O(n^2)", "O(n)", "O(1)"],
+      "correctOption": 1
+    },
+    {
+      "id": "q33",
+      "topicId": "t4",
+      "question": "Which algorithm is used to find the Minimum Spanning Tree and follows a Greedy approach?",
+      "options": [
+        "Kruskal's Algorithm",
+        "Floyd-Warshall",
+        "Bellman-Ford",
+        "Merge Sort"
+      ],
+      "correctOption": 0
+    },
+    {
+      "id": "q34",
+      "topicId": "t4",
+      "question": "Dynamic programming solves problems by:",
+      "options": [
+        "Making locally optimal choices",
+        "Breaking them into overlapping subproblems",
+        "Dividing into non-overlapping subproblems",
+        "Randomly guessing answers"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q35",
+      "topicId": "t4",
+      "question": "The time complexity of binary search on a sorted array is:",
+      "options": ["O(1)", "O(n)", "O(log n)", "O(n log n)"],
+      "correctOption": 2
+    },
+    {
+      "id": "q36",
+      "topicId": "t4",
+      "question": "In a graph, Breadth-First Search (BFS) uses which data structure?",
+      "options": ["Stack", "Queue", "Heap", "Tree"],
+      "correctOption": 1
+    },
+    {
+      "id": "q37",
+      "topicId": "t4",
+      "question": "The shortest path from a single source vertex to all other vertices in a weighted graph is found using:",
+      "options": [
+        "Dijkstra's Algorithm",
+        "Prim's Algorithm",
+        "DFS",
+        "Binary Search"
+      ],
+      "correctOption": 0
+    },
+    {
+      "id": "q38",
+      "topicId": "t4",
+      "question": "What is the time complexity of accessing an element in an array by its index?",
+      "options": ["O(1)", "O(log n)", "O(n)", "O(n^2)"],
+      "correctOption": 0
+    },
+    {
+      "id": "q39",
+      "topicId": "t4",
+      "question": "Which of the following utilizes a LIFO (Last In First Out) principle?",
+      "options": ["Queue", "Hash Table", "Stack", "Linked List"],
+      "correctOption": 2
+    },
+    {
+      "id": "q40",
+      "topicId": "t4",
+      "question": "Longest Common Subsequence (LCS) is typically solved using which paradigm?",
+      "options": [
+        "Greedy",
+        "Dynamic Programming",
+        "Backtracking",
+        "Divide and Conquer"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q41",
+      "topicId": "t5",
+      "question": "What is the primary method of problem solving in AI according to Rich and Knight?",
+      "options": [
+        "Data Mining",
+        "State Space Search",
+        "Pattern Recognition",
+        "Object-Oriented Programming"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q42",
+      "topicId": "t5",
+      "question": "Which algorithm is best known for finding the optimal path and employs the heuristic f(n) = g(n) + h(n)?",
+      "options": [
+        "Breadth-First Search",
+        "Depth-First Search",
+        "A* Algorithm",
+        "Hill Climbing"
+      ],
+      "correctOption": 2
+    },
+    {
+      "id": "q43",
+      "topicId": "t5",
+      "question": "In the context of game playing algorithms, what is the Minimax procedure used for?",
+      "options": [
+        "To find the shortest path in a maze",
+        "To minimize the maximum possible loss",
+        "To guarantee a win for the first player",
+        "To map knowledge representation"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q44",
+      "topicId": "t5",
+      "question": "Which logic represents knowledge using facts that are either definitively True or False without variables or quantifiers?",
+      "options": [
+        "First-Order Predicate Logic",
+        "Fuzzy Logic",
+        "Propositional Logic",
+        "Temporal Logic"
+      ],
+      "correctOption": 2
+    },
+    {
+      "id": "q45",
+      "topicId": "t5",
+      "question": "What is Hill Climbing in AI?",
+      "options": [
+        "A heuristic search technique for mathematical optimization",
+        "A method for deep learning backpropagation",
+        "An algorithm for generating neural networks",
+        "A semantic network optimization"
+      ],
+      "correctOption": 0
+    },
+    {
+      "id": "q46",
+      "topicId": "t5",
+      "question": "A complete state space search always finds a solution if one exists. Which of these is NOT complete?",
+      "options": [
+        "Breadth-First Search",
+        "A* Search",
+        "A simple Hill Climbing search",
+        "Uniform Cost Search"
+      ],
+      "correctOption": 2
+    },
+    {
+      "id": "q47",
+      "topicId": "t5",
+      "question": "What is 'Resolution' in predicate logic?",
+      "options": [
+        "A rule of inference used for theorem proving",
+        "A method to reduce image size",
+        "A way to resolve variable conflicts in python",
+        "A method to break down a state space graph"
+      ],
+      "correctOption": 0
+    },
+    {
+      "id": "q48",
+      "topicId": "t5",
+      "question": "In game playing, 'Alpha-Beta Pruning' is a technique used to:",
+      "options": [
+        "Prune neural network nodes",
+        "Decrease the number of nodes evaluated by the minimax algorithm",
+        "Increase the search depth randomly",
+        "Find all possible optimal moves"
+      ],
+      "correctOption": 1
+    },
+    {
+      "id": "q49",
+      "topicId": "t5",
+      "question": "What structure is often used for knowledge representation conceptually resembling a graph with nodes and labeled edges?",
+      "options": [
+        "Semantic Network",
+        "Binary Search Tree",
+        "Linked List",
+        "Truth Table"
+      ],
+      "correctOption": 0
+    },
+    {
+      "id": "q50",
+      "topicId": "t5",
+      "question": "The 'Water Jug Problem' is classically used to illustrate which AI concept?",
+      "options": [
+        "Neural Networks",
+        "State Space Search",
+        "Supervised Learning",
+        "Natural Language Processing"
+      ],
+      "correctOption": 1
+    }
+  ]
+}

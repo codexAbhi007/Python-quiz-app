@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Clock } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
-import quizData from "@/data/questions.json";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -23,7 +22,10 @@ type Question = {
 };
 
 export default function Home() {
-  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [quizData, setQuizData] = useState<{
+    topics: Topic[];
+    questions: Question[];
+  } | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -31,23 +33,74 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15);
-  const [resultsAnalysis, setResultsAnalysis] = useState<{question: string, correct: boolean, yourAnswer: string, correctAnswer: string}[]>([]);
+  const [resultsAnalysis, setResultsAnalysis] = useState<
+    {
+      question: string;
+      correct: boolean;
+      yourAnswer: string;
+      correctAnswer: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/data")
+      .then((res) => res.json())
+      .then((data) => setQuizData(data))
+      .catch((err) => console.error("Error fetching quiz data:", err));
+  }, []);
+
+  const handleNextQuestion = useCallback(
+    (answerIndex: number | null) => {
+      const currentQ = questions[currentQuestionIndex];
+      if (!currentQ) return;
+      const isCorrect = answerIndex === currentQ.correctOption;
+
+      if (isCorrect) setScore((prev) => prev + 1);
+
+      setResultsAnalysis((prev) => [
+        ...prev,
+        {
+          question: currentQ.question,
+          correct: isCorrect,
+          yourAnswer:
+            answerIndex !== null && currentQ.options
+              ? currentQ.options[answerIndex]
+              : "Didn't answer",
+          correctAnswer: currentQ.options[currentQ.correctOption],
+        },
+      ]);
+
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex((prev) => prev + 1);
+        setSelectedAnswer(null);
+        setTimeLeft(15);
+      } else {
+        setSelectedAnswer(null);
+        setIsFinished(true);
+        setIsPlaying(false);
+      }
+    },
+    [questions, currentQuestionIndex],
+  );
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isPlaying && !isFinished && timeLeft > 0) {
       timer = setTimeout(() => {
-        setTimeLeft(prev => prev - 1);
+        setTimeLeft((prev) => prev - 1);
       }, 1000);
-    } else if (timeLeft === 0 && isPlaying) {
-      handleNextQuestion(null);
+    } else if (timeLeft === 0 && isPlaying && !isFinished) {
+      // Small delay to allow the last tick to render before jumping to next question
+      timer = setTimeout(() => {
+        handleNextQuestion(null);
+      }, 0);
     }
     return () => clearTimeout(timer);
-  }, [timeLeft, isPlaying, isFinished]);
+  }, [timeLeft, isPlaying, isFinished, handleNextQuestion]);
 
   const handleStartQuiz = (topic: Topic) => {
-    const topicQs = quizData.questions.filter(q => q.topicId === topic.id);
-    setSelectedTopic(topic);
+    if (!quizData) return;
+    const topicQs = quizData.questions.filter((q) => q.topicId === topic.id);
     setQuestions(topicQs);
     setCurrentQuestionIndex(0);
     setScore(0);
@@ -58,32 +111,7 @@ export default function Home() {
     setTimeLeft(15);
   };
 
-  const handleNextQuestion = (answerIndex: number | null) => {
-    const currentQ = questions[currentQuestionIndex];
-    const isCorrect = answerIndex === currentQ.correctOption;
-    
-    if (isCorrect) setScore(prev => prev + 1);
-    
-    setResultsAnalysis(prev => [...prev, {
-      question: currentQ.question,
-      correct: isCorrect,
-      yourAnswer: answerIndex !== null ? currentQ.options[answerIndex] : "Didn't answer",
-      correctAnswer: currentQ.options[currentQ.correctOption]
-    }]);
-
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-      setSelectedAnswer(null);
-      setTimeLeft(15);
-    } else {
-      setSelectedAnswer(null);
-      setIsFinished(true);
-      setIsPlaying(false);
-    }
-  };
-
   const handleRestart = () => {
-    setSelectedTopic(null);
     setQuestions([]);
     setIsPlaying(false);
     setIsFinished(false);
@@ -92,95 +120,205 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
-      <header className="p-4 border-b flex justify-between items-center max-w-5xl mx-auto">
-        <h1 className="text-2xl font-bold tracking-tight">QuizApp (v1)</h1>
-        <ModeToggle />
+    <div className="h-screen flex flex-col bg-gradient-to-br from-indigo-50 via-white to-blue-50 dark:from-slate-950 dark:via-background dark:to-slate-900 text-foreground transition-colors duration-500 overflow-hidden relative">
+      {/* Top Header Bar */}
+      <header className="flex-shrink-0 sticky top-0 z-50 p-4 border-b border-border/50 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md shadow-sm">
+        <div className="flex justify-between items-center max-w-6xl mx-auto w-full">
+          <h1 className="text-2xl font-bold tracking-tight text-primary flex items-center gap-2">
+            Quiz Application
+          </h1>
+          <ModeToggle />
+        </div>
       </header>
-      
-      <main className="max-w-3xl mx-auto p-6 mt-8">
+
+      <main className="flex-1 flex flex-col min-h-0 w-full max-w-4xl mx-auto px-4 py-6 relative z-10 mb-10">
         {!isPlaying && !isFinished && (
-          <div className="space-y-6">
-            <h2 className="text-3xl font-semibold mb-6">Choose a Topic</h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              {quizData.topics.map((topic) => (
-                <Card key={topic.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer border hover:border-primary" onClick={() => handleStartQuiz(topic)}>
-                  <h3 className="text-xl font-bold mb-2">{topic.name}</h3>
-                  <p className="text-muted-foreground text-sm">{topic.description}</p>
-                </Card>
-              ))}
+          <div className="flex-1 space-y-6 pb-10">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-2">Choose a Topic</h2>
+              <p className="text-muted-foreground">
+                Select a subject to begin your quiz
+              </p>
             </div>
+            {!quizData ? (
+              <div className="flex justify-center items-center py-10">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2">
+                {quizData.topics.map((topic) => (
+                  <Card
+                    key={topic.id}
+                    className="group p-6 cursor-pointer border hover:border-primary transition-colors bg-white/50 dark:bg-slate-950/50 backdrop-blur-md shadow-sm"
+                    onClick={() => handleStartQuiz(topic)}
+                  >
+                    <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                      {topic.name}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {topic.description}
+                    </p>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {isPlaying && !isFinished && questions.length > 0 && (
-          <Card className="p-8 max-w-2xl mx-auto relative overflow-hidden">
-            <div className="mb-8">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-muted-foreground font-medium">Question {currentQuestionIndex + 1} of {questions.length}</span>
-                <div className={`flex items-center gap-1.5 ${timeLeft <= 5 ? "text-red-500 animate-pulse" : "text-muted-foreground"}`}>
+          <Card className="p-6 md:p-8 w-full max-w-3xl mx-auto relative flex flex-col flex-1 min-h-0 overflow-hidden border shadow-sm bg-white/50 dark:bg-slate-950/50 backdrop-blur-md">
+            <div className="mb-4 flex-shrink-0">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Question{" "}
+                  <span className="font-semibold text-foreground">
+                    {currentQuestionIndex + 1}
+                  </span>{" "}
+                  of {questions.length}
+                </span>
+                <div
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${
+                    timeLeft <= 5
+                      ? "bg-red-500/10 border-red-500/30 text-red-600 font-medium"
+                      : "bg-secondary text-foreground"
+                  }`}
+                >
                   <Clock className="w-4 h-4" />
-                  <span className="text-sm font-bold">{timeLeft}s</span>
+                  <span className="text-sm">{timeLeft}s</span>
                 </div>
               </div>
-              <Progress value={((currentQuestionIndex + 1) / questions.length) * 100} className="rounded-full h-2" />
+              <Progress
+                value={((currentQuestionIndex + 1) / questions.length) * 100}
+                className="h-2 rounded-full bg-secondary"
+              />
             </div>
 
-            <h2 className="text-2xl font-semibold mb-6">{questions[currentQuestionIndex].question}</h2>
-            
-            <div className="grid gap-3">
+            <div className="py-4 md:py-6 shrink-0 flex items-center justify-center">
+              <h2 className="text-xl md:text-2xl font-medium text-foreground text-center">
+                {questions[currentQuestionIndex].question}
+              </h2>
+            </div>
+
+            <div className="flex-1 overflow-y-auto grid gap-3 mt-2 pr-2 pb-4">
               {questions[currentQuestionIndex].options.map((option, idx) => (
-                <Button 
-                  key={idx} 
+                <Button
+                  key={idx}
                   variant={selectedAnswer === idx ? "default" : "outline"}
-                  className="w-full justify-start text-left h-auto py-4 px-6 text-md"
+                  className={`w-full justify-start text-left h-auto py-4 px-4 md:px-5 transition-colors border ${
+                    selectedAnswer === idx
+                      ? "bg-primary border-primary text-primary-foreground"
+                      : "border-border hover:bg-accent hover:text-accent-foreground"
+                  }`}
                   onClick={() => {
                     setSelectedAnswer(idx);
                     handleNextQuestion(idx);
                   }}
                 >
-                  <span className="mr-4 font-mono text-muted-foreground">{String.fromCharCode(65 + idx)}</span>
-                  {option}
+                  <span className="flex items-center justify-center w-6 h-6 rounded bg-muted text-muted-foreground mr-4 font-medium uppercase shrink-0">
+                    {String.fromCharCode(65 + idx)}
+                  </span>
+                  <span className="flex-1">{option}</span>
                 </Button>
               ))}
+            </div>
+
+            <div className="pt-4 flex-shrink-0 flex justify-end border-t border-border mt-auto">
+              <Button
+                variant="ghost"
+                onClick={handleRestart}
+                className="text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors"
+              >
+                Cancel & Exit Quiz
+              </Button>
             </div>
           </Card>
         )}
 
         {isFinished && (
-          <div className="space-y-8 animate-in slide-in-from-bottom border p-8 rounded-xl shadow-sm bg-card">
-            <div className="text-center">
-              <h2 className="text-4xl font-extrabold mb-2">Quiz Completed!</h2>
-              <p className="text-xl text-muted-foreground mb-4">
-                Your Score: <span className="font-bold text-primary">{score} / {questions.length}</span>
-              </p>
-              <div className="inline-block px-4 py-2 bg-primary/10 text-primary font-bold rounded-full mb-8">
-                Accuracy: {Math.round((score / questions.length) * 100)}%
-              </div>
-            </div>
+          <div className="space-y-8 animate-in slide-in-from-bottom max-w-3xl mx-auto flex flex-col flex-1 min-h-0 w-full">
+            <Card className="p-8 border rounded-xl shadow-sm bg-white/50 dark:bg-slate-950/50 backdrop-blur-md overflow-hidden relative flex flex-col flex-1 min-h-0">
+              <div className="text-center shrink-0">
+                <h2 className="text-3xl font-bold">Quiz Completed</h2>
 
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold mb-4 border-b pb-2">Result Analysis</h3>
-              {resultsAnalysis.map((res, i) => (
-                <div key={i} className={`p-4 rounded-lg border ${res.correct ? "border-green-500/20 bg-green-500/5" : "border-red-500/20 bg-red-500/5"}`}>
-                  <p className="font-medium mb-3">{i + 1}. {res.question}</p>
-                  <div className="flex flex-col sm:flex-row sm:gap-4 gap-2 text-sm">
-                    <p className={res.correct ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}>
-                      <span className="font-semibold">Your Answer:</span> {res.yourAnswer}
-                    </p>
-                    {!res.correct && (
-                      <p className="text-green-600 dark:text-green-400">
-                        <span className="font-semibold">Correct Answer:</span> {res.correctAnswer}
-                      </p>
-                    )}
+                <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4">
+                  <div className="flex flex-col p-4 rounded-lg bg-muted border">
+                    <span className="text-muted-foreground uppercase text-xs font-semibold tracking-wider">
+                      Final Score
+                    </span>
+                    <span className="text-2xl font-bold">
+                      {score}{" "}
+                      <span className="text-lg text-muted-foreground">
+                        / {questions.length}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="flex flex-col p-4 rounded-lg bg-muted border">
+                    <span className="text-muted-foreground uppercase text-xs font-semibold tracking-wider mb-1">
+                      Accuracy
+                    </span>
+                    <span className="text-2xl font-bold">
+                      {Math.round((score / questions.length) * 100)}%
+                    </span>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
 
-            <div className="pt-6 text-center">
-              <Button size="lg" onClick={handleRestart} className="px-8 font-semibold">Play Again</Button>
-            </div>
+              <div className="flex flex-col flex-1 min-h-0 space-y-4">
+                <h3 className="text-xl font-semibold mb-1 shrink-0">
+                  Result Analysis
+                </h3>
+
+                <div className="grid gap-4 mt-4 overflow-y-auto pr-2 flex-1 pb-4">
+                  {resultsAnalysis.map((res, i) => (
+                    <div
+                      key={i}
+                      className={`p-5 rounded-lg border shrink-0 ${
+                        res.correct
+                          ? "border-green-500/20 bg-green-500/5 text-green-700 dark:text-green-400"
+                          : "border-red-500/20 bg-red-500/5 text-red-700 dark:text-red-400"
+                      }`}
+                    >
+                      <div className="flex gap-3">
+                        <div className="font-semibold">{i + 1}.</div>
+                        <div className="flex-1">
+                          <p className="font-medium mb-3 text-foreground">
+                            {res.question}
+                          </p>
+
+                          <div className="grid gap-2 text-sm">
+                            <div className="flex gap-2">
+                              <span className="font-semibold min-w-[120px]">
+                                Your Answer:
+                              </span>
+                              <span>{res.yourAnswer}</span>
+                            </div>
+
+                            {!res.correct && (
+                              <div className="flex gap-2">
+                                <span className="font-semibold min-w-[120px]">
+                                  Correct Answer:
+                                </span>
+                                <span>{res.correctAnswer}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-8 text-center mt-auto border-t shrink-0">
+                <Button
+                  size="lg"
+                  onClick={handleRestart}
+                  className="px-8 font-medium"
+                >
+                  Return to Home
+                </Button>
+              </div>
+            </Card>
           </div>
         )}
       </main>
