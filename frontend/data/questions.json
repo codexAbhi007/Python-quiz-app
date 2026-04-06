@@ -1,0 +1,63 @@
+{
+  "topics": [
+    {
+      "id": "t1",
+      "name": "General Knowledge",
+      "description": "Test your basic knowledge of the world."
+    },
+    {
+      "id": "t2",
+      "name": "Programming",
+      "description": "Challenge your coding skills."
+    },
+    {
+      "id": "t3",
+      "name": "Science",
+      "description": "Physics, chemistry, and biology questions."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "topicId": "t1",
+      "question": "What is the capital of France?",
+      "options": ["Berlin", "London", "Paris", "Madrid"],
+      "correctOption": 2
+    },
+    {
+      "id": "q2",
+      "topicId": "t1",
+      "question": "Who wrote 'Hamlet'?",
+      "options": ["Charles Dickens", "William Shakespeare", "Mark Twain", "Leo Tolstoy"],
+      "correctOption": 1
+    },
+    {
+      "id": "q3",
+      "topicId": "t2",
+      "question": "Which language is used for styling web pages?",
+      "options": ["HTML", "JQuery", "CSS", "XML"],
+      "correctOption": 2
+    },
+    {
+      "id": "q4",
+      "topicId": "t2",
+      "question": "What does API stand for?",
+      "options": ["Application Programming Interface", "Advanced Programming Interface", "Application Program Integration", "None of the above"],
+      "correctOption": 0
+    },
+    {
+      "id": "q5",
+      "topicId": "t3",
+      "question": "What is the chemical symbol for water?",
+      "options": ["O2", "H2O", "CO2", "NaCl"],
+      "correctOption": 1
+    },
+    {
+      "id": "q6",
+      "topicId": "t3",
+      "question": "How many planets are in the solar system?",
+      "options": ["7", "8", "9", "10"],
+      "correctOption": 1
+    }
+  ]
+}
