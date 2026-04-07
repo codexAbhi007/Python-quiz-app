@@ -43,7 +43,10 @@ export default function Home() {
   >([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/data")
+    // Uses the Environment variable in production, falls back to localhost in dev
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    
+    fetch(`${API_URL}/api/data`)
       .then((res) => res.json())
       .then((data) => setQuizData(data))
       .catch((err) => console.error("Error fetching quiz data:", err));
